@@ -21,10 +21,11 @@ public class Position implements Comparable<Position> {
 
     @Override
     public int compareTo(Position o) {
-        int temp = this.getRow() - o.getRow();
+        int temp = this.getColumn() - o.getColumn();
         if (temp != 0) return temp;
-        return this.getColumn() - o.getColumn();
+        return this.getRow() - o.getRow();
     }
+
 
     public String toDto() {
         char colChar = (char) ('A' + column - 1);

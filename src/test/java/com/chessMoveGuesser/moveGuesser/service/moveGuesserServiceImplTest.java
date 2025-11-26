@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -105,5 +106,73 @@ class MoveGuesserServiceImplTest {
         // strategyFactory should not be called when position is invalid
         verify(strategyFactory, never()).getStrategy(ArgumentMatchers.any());
     }
+
+    @Test
+    public void getPossibleMoves_whenUsingRealPositionObjects_thenReturnsJoinedDtos() throws Exception {
+        MoveGuesserServiceImpl service = createServiceAndInjectMockBoard(8);
+
+        Position inputPosition = new Position("D5");
+        Position p1 = new Position("C4");
+        Position p2 = new Position("C5");
+        Position p3 = new Position("C6");
+        Position p4 = new Position("D4");
+        Position p5 = new Position("D6");
+        Position p6 = new Position("E4");
+        Position p7 = new Position("E5");
+        Position p8 = new Position("E6");
+
+        when(mockBoard.isValid(inputPosition)).thenReturn(true);
+        when(strategyFactory.getStrategy(Pieces.KING)).thenReturn(strategy);
+        when(strategy.getMoves(inputPosition, mockBoard)).thenReturn(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8));
+
+        String result = service.getPossibleMoves(inputPosition, Pieces.KING);
+
+        assertEquals("C4, C5, C6, D4, D6, E4, E5, E6", result);
+        verify(mockBoard).isValid(inputPosition);
+        verify(strategyFactory).getStrategy(Pieces.KING);
+        verify(strategy).getMoves(inputPosition, mockBoard);
+    }
+
+    @Test
+    public void getPossibleMoves_whenStrategyReturnsUnsortedPositions_preservesOrder() throws Exception {
+        MoveGuesserServiceImpl service = createServiceAndInjectMockBoard(8);
+
+        Position inputPosition = new Position("E4");
+        List<Position> results = Arrays.stream("A4, B4, C4, D4, F4, G4, H4, E1, E2, E3, E5, E6, E7, E8, A8, B7, C6, D5, F3, G2, H1, B1, C2, D3, F5, G6, H7".split(", "))
+                .map(String::trim)
+                .map(Position::new)
+                .toList();
+
+        when(mockBoard.isValid(inputPosition)).thenReturn(true);
+        when(strategyFactory.getStrategy(Pieces.QUEEN)).thenReturn(strategy);
+        when(strategy.getMoves(inputPosition, mockBoard)).thenReturn(results);
+
+        String result = service.getPossibleMoves(inputPosition, Pieces.QUEEN);
+
+        assertEquals("A4, B4, C4, D4, F4, G4, H4, E1, E2, E3, E5, E6, E7, E8, A8, B7, C6, D5, F3, G2, H1, B1, C2, D3, F5, G6, H7", result);
+        verify(mockBoard).isValid(inputPosition);
+        verify(strategyFactory).getStrategy(Pieces.QUEEN);
+        verify(strategy).getMoves(inputPosition, mockBoard);
+    }
+
+    @Test
+    public void getPossibleMoves_whenStrategyReturnsSinglePosition_thenReturnsSingleDto() throws Exception {
+        MoveGuesserServiceImpl service = createServiceAndInjectMockBoard(8);
+
+        Position inputPosition = new Position("d4");
+        Position p1 = new Position("D5");
+
+        when(mockBoard.isValid(inputPosition)).thenReturn(true);
+        when(strategyFactory.getStrategy(Pieces.PAWN)).thenReturn(strategy);
+        when(strategy.getMoves(inputPosition, mockBoard)).thenReturn(Arrays.asList(p1));
+
+        String result = service.getPossibleMoves(inputPosition, Pieces.PAWN);
+
+        assertEquals("D5", result);
+        verify(mockBoard).isValid(inputPosition);
+        verify(strategyFactory).getStrategy(Pieces.PAWN);
+        verify(strategy).getMoves(inputPosition, mockBoard);
+    }
+
 }
 

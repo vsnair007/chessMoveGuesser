@@ -8,7 +8,7 @@ A small Spring Boot service that computes possible chess moves for a given piece
 
 ## Key features
 
-- Piece-specific move strategies (knight, king, queen, pawn, etc.)
+- Piece-specific move strategies (king, queen, pawn)
 - Board validation with configurable board size
 - Caffeine-backed caching for repeated queries
 - Clean service layer (`MoveGuesserServiceImpl`) and pluggable `MoveStratergyFactory`
@@ -25,6 +25,7 @@ Prerequisites
 
 Clone
 ```bash
+
 git clone https://github.com/vsnair007/chessMoveGuesser.git
 cd chessMoveGuesser
 ```
@@ -35,6 +36,14 @@ Build & Run
 - Also modify the application.properties and commands to make changes to server port and board size as needed.
 
 ```bash
+
 docker build -t move_guesser . 
 docker run -p 8080:8080 move_guesser
+```
+
+Sample Request
+
+```bash
+
+curl -X GET "http://localhost:8080/api/v1/moveGuesser?piece=Queen&pos=E4
 ```
