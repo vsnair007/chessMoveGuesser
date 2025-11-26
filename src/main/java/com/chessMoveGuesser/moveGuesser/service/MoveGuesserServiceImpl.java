@@ -1,5 +1,6 @@
 package com.chessMoveGuesser.moveGuesser.service;
 
+import com.chessMoveGuesser.moveGuesser.exception.PostionOutOfBoardException;
 import com.chessMoveGuesser.moveGuesser.model.Board;
 import com.chessMoveGuesser.moveGuesser.model.Pieces;
 import com.chessMoveGuesser.moveGuesser.model.Position;
@@ -66,6 +67,10 @@ public class MoveGuesserServiceImpl implements MoveGuesserService {
     public String getPossibleMoves(Position position, Pieces piece) {
         // Obtain the strategy implementation for the requested piece
         MoveStratergy strategy = moveStratergyFactory.getStrategy(piece);
+
+        if(!board.isValid(position)) {
+            throw new PostionOutOfBoardException("The provided position " + position.toString() + " is out of board bounds.");
+        }
 
         // Delegate to the strategy to compute candidate positions, passing the board for validation
         List<Position> guessedPositions = strategy.getMoves(position, board);
