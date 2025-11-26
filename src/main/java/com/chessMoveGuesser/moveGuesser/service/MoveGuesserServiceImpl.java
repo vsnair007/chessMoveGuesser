@@ -27,9 +27,9 @@ public class MoveGuesserServiceImpl implements MoveGuesserService {
     @Override
     public String getPossibleMoves(Position position, Pieces piece) {
         MoveStratergy strategy = moveStratergyFactory.getStrategy(piece);
-        List<Position> guessedPostions = strategy.getMoves(position, board);
-        return guessedPostions.stream()
+        List<Position> guessedPositions = strategy.getMoves(position, board);
+        return guessedPositions.stream()
                 .map(Position::toDto)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining(", "));
     }
 }

@@ -10,11 +10,10 @@ import java.util.List;
 @Component("KING")
 public class KingMoveStratergy implements MoveStratergy {
     @Override
-    public List<Position> getMoves(Position position , Board board) {
-        System.out.println("Current postion : " + position);
-        int[][] possibleSteps = {{1,1},{-1,-1},{-1,1},{1,-1},{1,0},{0,1},{-1,0},{0,-1}};
-        return Arrays.stream(possibleSteps)
-                .map(step -> new Position(position.getRow()+step[0], position.getColumn()+step[1]))
+    public List<Position> getMoves(Position position, Board board) {
+        int[][] possibleDirection = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}};
+        return Arrays.stream(possibleDirection)
+                .map(step -> new Position(position.getRow() + step[0], position.getColumn() + step[1]))
                 .filter(board::isValid)
                 .distinct()
                 .sorted()
