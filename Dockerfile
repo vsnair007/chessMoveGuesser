@@ -13,7 +13,7 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 
 # Build the Spring Boot JAR
-RUN mvn clean package -DskipTests=true
+RUN mvn clean package -DskipTests=false
 
 # ---------- STAGE 2: Run ----------
 # Use lightweight JDK image to run the app

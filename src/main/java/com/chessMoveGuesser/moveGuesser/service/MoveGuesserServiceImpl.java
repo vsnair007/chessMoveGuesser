@@ -65,12 +65,12 @@ public class MoveGuesserServiceImpl implements MoveGuesserService {
     @Cacheable(value = "moves", key = "T(java.lang.String).valueOf(#piece) + '_' + #position.toString()")
     @Override
     public String getPossibleMoves(Position position, Pieces piece) {
-        // Obtain the strategy implementation for the requested piece
-        MoveStratergy strategy = moveStratergyFactory.getStrategy(piece);
-
         if(!board.isValid(position)) {
             throw new PostionOutOfBoardException("The provided position " + position.toString() + " is out of board bounds.");
         }
+
+        // Obtain the strategy implementation for the requested piece
+        MoveStratergy strategy = moveStratergyFactory.getStrategy(piece);
 
         // Delegate to the strategy to compute candidate positions, passing the board for validation
         List<Position> guessedPositions = strategy.getMoves(position, board);
