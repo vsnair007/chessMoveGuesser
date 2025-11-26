@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MoveGuesserServiceImpl implements MoveGuesserService {
@@ -24,8 +25,11 @@ public class MoveGuesserServiceImpl implements MoveGuesserService {
 
 
     @Override
-    public List<Position> getPossibleMoves(Position position, Pieces piece) {
+    public String getPossibleMoves(Position position, Pieces piece) {
         MoveStratergy strategy = moveStratergyFactory.getStrategy(piece);
-        return strategy.getMoves(position, board);
+        List<Position> guessedPostions = strategy.getMoves(position, board);
+        return guessedPostions.stream()
+                .map(Position::toDto)
+                .collect(Collectors.joining(","));
     }
 }

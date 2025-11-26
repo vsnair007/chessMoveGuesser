@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface MoveGuesserService {
 
-    List<Position> getPossibleMoves(Position position, Pieces piece);
+    String getPossibleMoves(Position position, Pieces piece);
 
 }

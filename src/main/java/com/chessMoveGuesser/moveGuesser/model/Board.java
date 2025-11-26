@@ -13,9 +13,9 @@ public class Board {
     }
 
     public boolean isValid(Position position) {
-        return position.getRow() >= 1 &&
+        return position.getRow() > 0 &&
                 position.getRow() <= rows &&
-                position.getColumn() >= 1 &&
+                position.getColumn() > 0 &&
                 position.getColumn() <= columns;
     }
 }

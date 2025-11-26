@@ -20,7 +20,7 @@ public class MoveGuesserController {
     private final MoveGuesserService moveGuesserService;
 
     @GetMapping
-    public ResponseEntity<List<Position>> moveGuesser(@RequestParam String piece,
+    public ResponseEntity<String> moveGuesser(@RequestParam String piece,
                                                       @RequestParam String pos) {
         return ResponseEntity.ok(moveGuesserService.getPossibleMoves(new Position(pos), Pieces.fromString(piece.trim().toUpperCase())));
     }
